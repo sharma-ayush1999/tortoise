@@ -1,0 +1,15 @@
+@import "variables";
+
+#inputBox {
+  input {
+    width: 80%;
+    background: $background-color-tertiary;
+    padding: 10px 0;
+  }
+  button {
+    background-color: $btn-color-primary;
+    color: $text-color-primary;
+    padding: 10px;
+    width: 20%;
+  }
+}

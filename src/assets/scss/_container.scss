@@ -1,0 +1,16 @@
+@import "variables";
+
+#container {
+  background: $background-color-primary;
+  color: $text-color-primary;
+  text-align: center;
+  h3 {
+    padding: 1em;
+    letter-spacing: 2px;
+  }
+  p {
+    line-height: 20px;
+    font-size: 0.8em;
+    letter-spacing: 1px;
+  }
+}
