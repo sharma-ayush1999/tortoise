@@ -5,11 +5,18 @@
     width: 80%;
     background: $background-color-tertiary;
     padding: 10px 0;
+    text-align: center;
+    font-weight: 700;
+    letter-spacing: 0.5px;
   }
   button {
     background-color: $btn-color-primary;
     color: $text-color-primary;
     padding: 10px;
     width: 20%;
+    cursor: pointer;
+  }
+  button:hover {
+    background-color: $btn-color-hover;
   }
 }

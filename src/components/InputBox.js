@@ -1,48 +1,48 @@
-import React, { useEffect, useState } from "react";
-import moment from "moment";
+import React, { useEffect, useRef, useState } from "react";
 
 const InputBox = ({
   letterCallback,
-  startTimerCallback,
-  stopTimerCallback,
-  totalTime,
   userInputCallback,
+  resetCallback,
+  stopTimerCallback,
 }) => {
   const [userInput, setUserInput] = useState("");
+  const ref = useRef(null);
 
   useEffect(() => {
-    letterCallback(1);
+    ref.current.focus();
+    letterCallback();
   }, []);
 
   const FreezeUserInput = (e) => {
-    userInputCallback(e.keyCode);
-    letterCallback(userInput.length);
+    setUserInput(e.target.value.toUpperCase());
     if (e.key === "Backspace") {
       return e.preventDefault();
     }
-    if (userInput.length < 20) {
-      startTimerCallback();
-      setUserInput(e.target.value.toUpperCase());
-      return;
+    if (userInput.length < 19) {
+      userInputCallback(e.keyCode);
+      letterCallback();
     } else {
       stopTimerCallback();
-      localStorage.setItem("best_time", totalTime);
     }
   };
 
   const handleReset = () => {
     setUserInput("");
     letterCallback();
+    resetCallback();
   };
 
   return (
     <div id="inputBox">
       <input
+        ref={ref}
         onChange={FreezeUserInput}
         onKeyDown={FreezeUserInput}
         type="text"
         value={userInput}
-        disabled={userInput.length > 20}
+        disabled={userInput.length > 19}
+        placeholder="Type Here"
       />
       <button onClick={handleReset}>Reset</button>
     </div>
