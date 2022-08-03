@@ -6,17 +6,16 @@ import { alphabetsList } from "../utils/constants";
 import moment from "moment";
 
 const Container = () => {
+  const [startTime, setStartTime] = useState(moment());
   const [letter, setLetter] = useState("");
   const [timerStartStop, setTimerStartStop] = useState(false);
   const [penaltyTime, setPenaltyTime] = useState(0);
   const [counter, setCounter] = useState(0);
-  const [userInput, setUserInput] = useState("");
   const [bestTime, setBestTime] = useState(
     localStorage.getItem("best_time")
       ? convertToSeconds(localStorage.getItem("best_time"))
       : 0
   );
-  const [startTime, setStartTime] = useState(moment());
 
   useEffect(() => {
     if (timerStartStop) {
@@ -26,16 +25,6 @@ const Container = () => {
       clearInterval(timerId);
     };
   }, [timerStartStop]);
-
-  useEffect(() => {
-    if (
-      userInput &&
-      letter &&
-      String.fromCharCode(userInput) !== letter.toUpperCase()
-    ) {
-      setPenaltyTime((prev) => prev + 500);
-    }
-  }, [userInput]);
 
   const refreshClock = () => {
     setCounter(moment().diff(startTime, "miliseconds"));
@@ -47,34 +36,39 @@ const Container = () => {
     );
   };
 
-  const userInputCallback = (userInput) => {
+  const userInputCallback = (userInput, firstUserInput) => {
+    if (firstUserInput) {
+      setStartTime(moment());
+    }
     setTimerStartStop(true);
-    setUserInput(userInput);
+    if (userInput && String.fromCharCode(userInput) !== letter.toUpperCase()) {
+      setPenaltyTime((prev) => prev + 500);
+    }
   };
 
-  const showSuccessMessage = () => {
-    setLetter("Success!");
+  const showMessage = (message) => {
+    setLetter(message);
   };
 
   const handleReset = () => {
     setTimerStartStop(false);
     setCounter(0);
     setPenaltyTime(0);
-    setStartTime(moment());
-    calculateBestTime();
+    setBestTime(bestTime);
   };
 
   const stopTimerWhenGameEnds = () => {
-    handleReset();
-    if (!bestTime || bestTime < counter + penaltyTime) {
-      showSuccessMessage();
+    setTimerStartStop(false);
+    if (
+      !localStorage.getItem("best_time") ||
+      localStorage.getItem("best_time") >= counter + penaltyTime
+    ) {
+      showMessage("Success!");
       setBestTime(convertToSeconds(counter + penaltyTime));
       localStorage.setItem("best_time", counter + penaltyTime);
+    } else {
+      showMessage("Better Luck Next Time!");
     }
-  };
-
-  const calculateBestTime = () => {
-    setBestTime(bestTime);
   };
 
   function convertToSeconds(ms) {
@@ -89,7 +83,10 @@ const Container = () => {
         starts when you do :{")"}
       </p>
       <Alphabet alphabet={letter} />
-      <Timer timer={convertToSeconds(counter)} bestTime={bestTime} />
+      <Timer
+        timer={convertToSeconds(counter + penaltyTime)}
+        bestTime={Number(bestTime).toFixed(2)}
+      />
       <InputBox
         letterCallback={generateRandomLetter}
         userInputCallback={userInputCallback}

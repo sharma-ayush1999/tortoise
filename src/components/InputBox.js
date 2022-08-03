@@ -7,6 +7,7 @@ const InputBox = ({
   stopTimerCallback,
 }) => {
   const [userInput, setUserInput] = useState("");
+  const [isReset, setIsReset] = useState(false);
   const ref = useRef(null);
 
   useEffect(() => {
@@ -14,15 +15,22 @@ const InputBox = ({
     letterCallback();
   }, []);
 
+  useEffect(() => {
+    if (isReset) {
+      ref.current.focus();
+    }
+  }, [isReset]);
+
   const FreezeUserInput = (e) => {
     setUserInput(e.target.value.toUpperCase());
     if (e.key === "Backspace") {
       return e.preventDefault();
     }
     if (userInput.length < 19) {
-      userInputCallback(e.keyCode);
+      userInputCallback(e.keyCode, userInput.length === 0);
       letterCallback();
     } else {
+      setIsReset(false);
       stopTimerCallback();
     }
   };
@@ -31,6 +39,7 @@ const InputBox = ({
     setUserInput("");
     letterCallback();
     resetCallback();
+    setIsReset(true);
   };
 
   return (
