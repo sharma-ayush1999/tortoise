@@ -53,7 +53,9 @@ const InputBox = ({
         disabled={userInput.length > 19}
         placeholder="Type Here"
       />
-      <button onClick={handleReset}>Reset</button>
+      <button disabled={userInput === ""} onClick={handleReset}>
+        Reset
+      </button>
     </div>
   );
 };
