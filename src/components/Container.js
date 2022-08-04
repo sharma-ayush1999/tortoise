@@ -7,15 +7,34 @@ import moment from "moment";
 
 const Container = () => {
   const [startTime, setStartTime] = useState(moment());
-  const [letter, setLetter] = useState("");
+  const [letter, setLetter] = useState({ alpha: "", count: 0 });
   const [timerStartStop, setTimerStartStop] = useState(false);
   const [penaltyTime, setPenaltyTime] = useState(0);
   const [counter, setCounter] = useState(0);
+  const [userInput, setUserInput] = useState("");
   const [bestTime, setBestTime] = useState(
     localStorage.getItem("best_time")
       ? convertToSeconds(localStorage.getItem("best_time"))
       : 0
   );
+
+  useEffect(() => {
+    generateRandomLetter();
+  }, []);
+
+  useEffect(() => {
+    if (userInput && letter.alpha) {
+      if (userInput === letter.alpha && letter.count < 21) {
+        setTimerStartStop(true);
+        generateRandomLetter();
+        if (letter.count === 1) {
+          setStartTime(moment());
+        }
+      } else {
+        setPenaltyTime(penaltyTime + 500);
+      }
+    }
+  }, [userInput]);
 
   useEffect(() => {
     if (timerStartStop) {
@@ -26,28 +45,27 @@ const Container = () => {
     };
   }, [timerStartStop]);
 
+  useEffect(() => {
+    if (letter.count === 21) {
+      setLetter({ alpha: "", count: 0 });
+      stopTimerWhenGameEnds();
+    }
+  }, [letter.alpha]);
+
   const refreshClock = () => {
     setCounter(moment().diff(startTime, "miliseconds"));
   };
 
   const generateRandomLetter = () => {
-    setLetter(
-      alphabetsList[Math.floor(Math.random() * 10) % alphabetsList.length]
-    );
+    setLetter({
+      alpha:
+        alphabetsList[Math.floor(Math.random() * 10) % alphabetsList.length],
+      count: letter.count + 1,
+    });
   };
 
-  const userInputCallback = (userInput, firstUserInput) => {
-    if (firstUserInput) {
-      setStartTime(moment());
-    }
-    setTimerStartStop(true);
-    if (userInput && String.fromCharCode(userInput) !== letter.toUpperCase()) {
-      setPenaltyTime((prev) => prev + 500);
-    }
-  };
-
-  const showMessage = (message) => {
-    setLetter(message);
+  const userInputCallback = (userInput) => {
+    setUserInput(String.fromCharCode(userInput));
   };
 
   const handleReset = () => {
@@ -55,6 +73,7 @@ const Container = () => {
     setCounter(0);
     setPenaltyTime(0);
     setBestTime(bestTime);
+    generateRandomLetter();
   };
 
   const stopTimerWhenGameEnds = () => {
@@ -63,11 +82,11 @@ const Container = () => {
       !localStorage.getItem("best_time") ||
       localStorage.getItem("best_time") >= counter + penaltyTime
     ) {
-      showMessage("Success!");
-      setBestTime(convertToSeconds(counter + penaltyTime));
+      setLetter({ alpha: "Success!", count: 0 });
       localStorage.setItem("best_time", counter + penaltyTime);
+      setBestTime(convertToSeconds(counter + penaltyTime));
     } else {
-      showMessage("Better Luck Next Time!");
+      setLetter({ alpha: "Better Luck Next time!", count: 0 });
     }
   };
 
@@ -82,16 +101,14 @@ const Container = () => {
         Typing game to see how fast you type. Timer <br />
         starts when you do :{")"}
       </p>
-      <Alphabet alphabet={letter} />
+      <Alphabet alphabet={letter.alpha} />
       <Timer
         timer={convertToSeconds(counter + penaltyTime)}
         bestTime={Number(bestTime).toFixed(2)}
       />
       <InputBox
-        letterCallback={generateRandomLetter}
         userInputCallback={userInputCallback}
         resetCallback={handleReset}
-        stopTimerCallback={stopTimerWhenGameEnds}
       />
     </div>
   );

@@ -1,18 +1,12 @@
 import React, { useEffect, useRef, useState } from "react";
 
-const InputBox = ({
-  letterCallback,
-  userInputCallback,
-  resetCallback,
-  stopTimerCallback,
-}) => {
+const InputBox = ({ userInputCallback, resetCallback }) => {
   const [userInput, setUserInput] = useState("");
   const [isReset, setIsReset] = useState(false);
   const ref = useRef(null);
 
   useEffect(() => {
     ref.current.focus();
-    letterCallback();
   }, []);
 
   useEffect(() => {
@@ -26,18 +20,11 @@ const InputBox = ({
     if (e.key === "Backspace") {
       return e.preventDefault();
     }
-    if (userInput.length < 19) {
-      userInputCallback(e.keyCode, userInput.length === 0);
-      letterCallback();
-    } else {
-      setIsReset(false);
-      stopTimerCallback();
-    }
+    userInputCallback(e.keyCode);
   };
 
   const handleReset = () => {
     setUserInput("");
-    letterCallback();
     resetCallback();
     setIsReset(true);
   };
@@ -50,12 +37,9 @@ const InputBox = ({
         onKeyDown={FreezeUserInput}
         type="text"
         value={userInput}
-        disabled={userInput.length > 19}
         placeholder="Type Here"
       />
-      <button disabled={userInput === ""} onClick={handleReset}>
-        Reset
-      </button>
+      <button onClick={handleReset}>Reset</button>
     </div>
   );
 };
