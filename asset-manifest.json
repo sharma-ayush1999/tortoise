@@ -1,15 +1,15 @@
 {
   "files": {
-    "main.css": "/tortoise/static/css/main.cde086cb.css",
+    "main.css": "/tortoise/static/css/main.99e5fc03.css",
     "main.js": "/tortoise/static/js/main.02fdc0fc.js",
     "static/js/787.b7ad37fa.chunk.js": "/tortoise/static/js/787.b7ad37fa.chunk.js",
     "index.html": "/tortoise/index.html",
-    "main.cde086cb.css.map": "/tortoise/static/css/main.cde086cb.css.map",
+    "main.99e5fc03.css.map": "/tortoise/static/css/main.99e5fc03.css.map",
     "main.02fdc0fc.js.map": "/tortoise/static/js/main.02fdc0fc.js.map",
     "787.b7ad37fa.chunk.js.map": "/tortoise/static/js/787.b7ad37fa.chunk.js.map"
   },
   "entrypoints": [
-    "static/css/main.cde086cb.css",
+    "static/css/main.99e5fc03.css",
     "static/js/main.02fdc0fc.js"
   ]
 }
