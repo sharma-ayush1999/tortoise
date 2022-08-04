@@ -104,7 +104,7 @@ const Container = () => {
       <Alphabet alphabet={letter.alpha} />
       <Timer
         timer={convertToSeconds(counter + penaltyTime)}
-        bestTime={Number(bestTime).toFixed(2)}
+        bestTime={bestTime ? Number(bestTime).toFixed(2) : 0}
       />
       <InputBox
         userInputCallback={userInputCallback}
