@@ -17,10 +17,15 @@ const Container = () => {
       ? convertToSeconds(localStorage.getItem("best_time"))
       : 0
   );
+  const [isReset, setIsReset] = useState(false);
 
   useEffect(() => {
-    generateRandomLetter();
-  }, []);
+    if (isReset) {
+      setIsReset(false);
+    } else {
+      generateRandomLetter();
+    }
+  }, [isReset]);
 
   useEffect(() => {
     if (userInput && letter.alpha) {
@@ -31,7 +36,9 @@ const Container = () => {
           setStartTime(moment());
         }
       } else {
-        setPenaltyTime(penaltyTime + 500);
+        if (letter.count > 1) {
+          setPenaltyTime(penaltyTime + 500);
+        }
       }
     }
   }, [userInput]);
@@ -73,7 +80,8 @@ const Container = () => {
     setCounter(0);
     setPenaltyTime(0);
     setBestTime(bestTime);
-    generateRandomLetter();
+    setLetter({ alpha: "", count: 0 });
+    setIsReset(true);
   };
 
   const stopTimerWhenGameEnds = () => {

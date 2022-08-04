@@ -1,5 +1,4 @@
 #container {
-  background: #0b1952;
   color: #fff;
   text-align: center;
 }
@@ -108,5 +107,9 @@ button {
 textarea:focus,
 input:focus {
   outline: none;
+}
+
+body {
+  background: #0b1952;
 }
 /*# sourceMappingURL=style.css.map */

@@ -24,3 +24,7 @@ textarea:focus,
 input:focus {
   outline: none;
 }
+
+body {
+  background: $background-color-primary;
+}

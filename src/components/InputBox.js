@@ -1,6 +1,6 @@
 import React, { useEffect, useRef, useState } from "react";
 
-const InputBox = ({ userInputCallback, resetCallback }) => {
+const InputBox = ({ userInputCallback, resetCallback, disableResetBtn }) => {
   const [userInput, setUserInput] = useState("");
   const [isReset, setIsReset] = useState(false);
   const ref = useRef(null);
