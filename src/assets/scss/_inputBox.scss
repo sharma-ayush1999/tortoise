@@ -1,6 +1,7 @@
 @import "variables";
 
 #inputBox {
+  display: flex;
   input {
     width: 80%;
     background: $background-color-tertiary;

@@ -51,6 +51,12 @@
   }
 }
 
+#inputBox {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+}
+
 #inputBox input {
   width: 80%;
   background: #f9f2e7;
